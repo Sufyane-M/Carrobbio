@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "buildCommand": "npm run vercel-build",
   "functions": {
     "api/**/*.ts": {
-      "runtime": "@vercel/node@2.15.10" 
+      "runtime": "@vercel/node@2.15.10"
     }
   },
+  "buildCommand": "npm install --include=dev && npm run build",
   "rewrites": [
     {
       "source": "/api/(.*)",
