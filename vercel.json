@@ -1,8 +1,9 @@
 {
   "version": 2,
+  "buildCommand": "npm run vercel-build",
   "functions": {
     "api/**/*.ts": {
-      "runtime": "@vercel/node@2.15.10" 
+      "runtime": "nodejs20.x"
     }
   },
   "rewrites": [
