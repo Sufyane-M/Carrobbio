@@ -246,6 +246,7 @@ export const Contatti: React.FC = () => {
                         id="email"
                         className="w-full px-4 py-3 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-accent-500 focus:border-accent-500 transition-all duration-200 font-body"
                         placeholder="la-tua-email@esempio.com"
+                        autoComplete="email"
                       />
                       {errors.email && (
                         <p className="mt-3 text-sm text-accent-600 font-medium">

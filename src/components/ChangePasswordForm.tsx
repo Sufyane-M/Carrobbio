@@ -228,6 +228,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
               }`}
               placeholder="Inserisci la password attuale"
               disabled={loading}
+              autoComplete="current-password"
             />
             <button
               type="button"
@@ -266,6 +267,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
               }`}
               placeholder="Inserisci la nuova password"
               disabled={loading}
+              autoComplete="new-password"
             />
             <button
               type="button"
@@ -345,6 +347,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
               }`}
               placeholder="Conferma la nuova password"
               disabled={loading}
+              autoComplete="new-password"
             />
             <button
               type="button"

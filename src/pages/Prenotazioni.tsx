@@ -266,6 +266,7 @@ export const Prenotazioni: React.FC = () => {
                       id="customer_email"
                       className="w-full px-4 py-3 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 font-body"
                       placeholder="mario.rossi@esempio.com"
+                      autoComplete="email"
                     />
                     {errors.customer_email && (
                       <p className="mt-2 text-sm text-accent-600 font-medium">

@@ -176,6 +176,7 @@ export const AdminManagement: React.FC<AdminManagementProps> = ({ currentUser, i
                   id="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  autoComplete="username"
                   className={`w-full px-3 py-2 bg-gray-700 border rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-gray-100 placeholder-gray-400 ${
                     errors.email ? 'border-red-600' : 'border-gray-600'
                   }`}
@@ -196,6 +197,7 @@ export const AdminManagement: React.FC<AdminManagementProps> = ({ currentUser, i
                     id="password"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    autoComplete="new-password"
                     className={`w-full px-3 py-2 pr-10 bg-gray-700 border rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-gray-100 placeholder-gray-400 ${
                       errors.password ? 'border-red-600' : 'border-gray-600'
                     }`}
@@ -224,6 +226,7 @@ export const AdminManagement: React.FC<AdminManagementProps> = ({ currentUser, i
                     id="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                    autoComplete="new-password"
                     className={`w-full px-3 py-2 pr-10 bg-gray-700 border rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-gray-100 placeholder-gray-400 ${
                       errors.confirmPassword ? 'border-red-600' : 'border-gray-600'
                     }`}
