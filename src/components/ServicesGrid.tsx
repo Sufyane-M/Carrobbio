@@ -144,8 +144,8 @@ export const ServicesGrid: React.FC<ServicesGridProps> = ({
               <Card
                 key={service.id}
                 className={`group relative overflow-hidden transition-all duration-500 ease-out transform ${colorClasses.highlight} ${colorClasses.hover} animate-fade-in-up`}
-                style={{ animationDelay: `${index * 0.2}s` }}
               >
+                <div style={{ animationDelay: `${index * 0.2}s` }} className="contents">
                 {/* Badge */}
                 {service.badge && (
                   <div className="absolute top-4 right-4 z-10">
@@ -220,6 +220,7 @@ export const ServicesGrid: React.FC<ServicesGridProps> = ({
 
                 {/* Hover Effect Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-primary-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                </div>
               </Card>
             )
           })}

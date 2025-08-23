@@ -159,14 +159,12 @@ export const Home: React.FC = () => {
               </div>
               
               {/* Hours Widget - Full width */}
-              <div>
-                <HoursWidget 
-                  showContactInfo={true}
-                  collapsible={false}
-                  theme="warm"
-                  className=""
-                />
-              </div>
+              <div style={{ animationDelay: '0.6s' }}>
+                  <HoursWidget 
+                    showContactInfo={true}
+                    className="lg:col-span-1"
+                  />
+                </div>
             </div>
           </div>
         </section>

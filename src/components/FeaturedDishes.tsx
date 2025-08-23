@@ -90,9 +90,9 @@ const DishCard: React.FC<{ dish: EnhancedMenuItem; index: number }> = ({ dish, i
 
   return (
     <Card 
-      className="group relative overflow-hidden transition-all duration-500 ease-out transform hover:shadow-strong hover:-translate-y-2 animate-fade-in-up"
-      style={{ animationDelay: `${index * 0.2}s` }}
+      className={`group relative overflow-hidden transition-all duration-500 ease-out transform hover:shadow-strong hover:-translate-y-2 animate-fade-in-up`}
     >
+      <div style={{ animationDelay: `${index * 0.2}s` }} className="contents">
       {/* Image Container */}
       <div className="relative h-56 overflow-hidden">
         <img
@@ -222,6 +222,7 @@ const DishCard: React.FC<{ dish: EnhancedMenuItem; index: number }> = ({ dish, i
 
       {/* Hover effect overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-primary-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+      </div>
     </Card>
   )
 }

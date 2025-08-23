@@ -6,11 +6,14 @@
   "scripts": {
     "client:dev": "vite",
     "build": "tsc -b && vite build",
+    "vercel-build": "npm run build",
     "lint": "eslint .",
     "preview": "vite preview",
     "check": "tsc --noEmit",
     "server:dev": "tsx watch api/server.ts",
-    "dev": "concurrently \"npm run client:dev\" \"npm run server:dev\""
+    "dev": "concurrently \"npm run client:dev\" \"npm run server:dev\"",
+    "start": "node api/server.js",
+    "postbuild": "echo 'Build completed successfully'"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

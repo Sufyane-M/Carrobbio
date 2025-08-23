@@ -71,8 +71,9 @@ export const trackPerformance = () => {
 
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
-        if (!entry.hadRecentInput) {
-          clsValue += (entry as any).value
+        const layoutShiftEntry = entry as any
+        if (!layoutShiftEntry.hadRecentInput) {
+          clsValue += layoutShiftEntry.value
           clsEntries.push(entry)
         }
       }

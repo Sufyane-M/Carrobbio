@@ -8,11 +8,8 @@ export default defineConfig({
   plugins: [
     react({
       babel: {
-        plugins: [
-          'react-dev-locator',
-        ],
+        plugins: process.env.NODE_ENV !== 'production' ? ['react-dev-locator'] : [],
       },
-      jsxImportSource: process.env.NODE_ENV === 'production' ? '@emotion/react' : undefined,
     }),
     traeBadgePlugin({
       variant: 'dark',
@@ -25,6 +22,20 @@ export default defineConfig({
     }), 
     tsconfigPaths(),
   ],
+  build: {
+    outDir: 'dist',
+    sourcemap: false,
+    minify: 'terser',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          router: ['react-router-dom'],
+          supabase: ['@supabase/supabase-js'],
+        },
+      },
+    },
+  },
   server: {
     proxy: {
       '/api': {
