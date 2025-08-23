@@ -9,7 +9,7 @@ import { sendSuspiciousLoginNotification } from './emailService.js';
 import crypto from 'crypto'
 import { SecurityStats, ThreatAnalysis, IPAnalysis } from '../../shared/types.js';
 
-const supabaseUrl = process.env.VITE_SUPABASE_URL!;
+const supabaseUrl = process.env.SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
