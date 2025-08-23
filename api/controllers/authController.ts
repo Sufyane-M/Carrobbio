@@ -11,6 +11,12 @@ import crypto from 'crypto';
  * Conforme alle specifiche OWASP per la sicurezza
  */
 
+// JWT Secret validation
+const JWT_SECRET: string = process.env.JWT_SECRET || '';
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is required');
+}
+
 // Schema di validazione per il login (rilassato per compatibilità con utenti seed)
 const loginSchema = z.object({
   email: z.string()
@@ -115,7 +121,7 @@ function generateJWT(adminId: string, email: string, role: string): string {
     exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60) // 24 ore
   };
   
-  return jwt.sign(payload, process.env.JWT_SECRET!, {
+  return jwt.sign(payload, JWT_SECRET, {
     algorithm: 'HS256',
     issuer: 'carrobbio-admin',
     audience: 'carrobbio-admin-panel'
@@ -911,7 +917,7 @@ export const verifySession = async (req: Request, res: Response): Promise<void> 
   
   try {
     // Verifica JWT
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any;
+    const decoded = jwt.verify(token, JWT_SECRET) as any;
     
     // Verifica sessione nel database
     const { data: session, error: sessionError } = await supabase

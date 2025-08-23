@@ -9,6 +9,12 @@ import { z } from 'zod';
  * Conforme alle specifiche OWASP per la sicurezza
  */
 
+// JWT Secret validation
+const JWT_SECRET: string = process.env.JWT_SECRET || '';
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is required');
+}
+
 // Interfaccia per la richiesta autenticata
 interface AuthenticatedRequest extends Request {
   adminId?: string;
@@ -79,7 +85,7 @@ export const authenticateToken = async (
     // Verifica e decodifica JWT
     let decoded: any;
     try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET!, {
+      decoded = jwt.verify(token, JWT_SECRET, {
         algorithms: ['HS256'],
         issuer: 'carrobbio-admin',
         audience: 'carrobbio-admin-panel'

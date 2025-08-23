@@ -9,8 +9,18 @@ import { sendSuspiciousLoginNotification } from './emailService.js';
 import crypto from 'crypto'
 import { SecurityStats, ThreatAnalysis, IPAnalysis } from '../../shared/types.js';
 
-const supabaseUrl = process.env.SUPABASE_URL!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+// Environment variables validation
+const supabaseUrl: string = process.env.SUPABASE_URL || '';
+const supabaseServiceKey: string = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+
+if (!supabaseUrl) {
+  throw new Error('SUPABASE_URL environment variable is required');
+}
+
+if (!supabaseServiceKey) {
+  throw new Error('SUPABASE_SERVICE_ROLE_KEY environment variable is required');
+}
+
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 // Configurazioni di sicurezza

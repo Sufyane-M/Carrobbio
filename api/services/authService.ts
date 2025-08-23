@@ -10,6 +10,13 @@ import { z } from 'zod';
  * Conforme alle specifiche OWASP e best practices di sicurezza
  */
 
+// JWT Secret validation
+const JWT_SECRET: string = process.env.JWT_SECRET || '';
+const JWT_REFRESH_SECRET: string = process.env.JWT_REFRESH_SECRET || JWT_SECRET;
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is required');
+}
+
 // Configurazione sicurezza
 const SALT_ROUNDS = 12;
 const MAX_LOGIN_ATTEMPTS = 5;
@@ -366,7 +373,7 @@ export class AuthService {
       mustChangePassword: user.must_change_password
     };
     
-    const accessToken = jwt.sign(payload, process.env.JWT_SECRET!, {
+    const accessToken = jwt.sign(payload, JWT_SECRET, {
       expiresIn: `${SESSION_DURATION_HOURS}h`,
       issuer: 'carrobbio-admin',
       audience: 'carrobbio-admin-panel',
@@ -375,7 +382,7 @@ export class AuthService {
     
     const refreshToken = jwt.sign(
       { adminId: user.id, type: 'refresh' }, 
-      process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET!, 
+      JWT_REFRESH_SECRET, 
       {
         expiresIn: `${REFRESH_TOKEN_DURATION_DAYS}d`,
         issuer: 'carrobbio-admin',
