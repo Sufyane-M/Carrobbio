@@ -11,7 +11,7 @@ export { default as SecurityDashboard } from './SecurityDashboard'
 export { HeroCarousel } from './HeroCarousel'
 export { HoursWidget } from './HoursWidget'
 export { ServicesGrid } from './ServicesGrid'
-export { FeaturedDishes } from './FeaturedDishes'
+// FeaturedDishes is dynamically imported in Home.tsx to avoid chunk duplication
 export { LocationSection } from './LocationSection'
 export { CTAFooter } from './CTAFooter'
 
