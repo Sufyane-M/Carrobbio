@@ -8,15 +8,17 @@ Questa guida risolve i problemi comuni durante il deploy del progetto Il Carrobb
 
 **Problema:** Node.js 18.x è deprecato su Vercel dal 1 settembre 2025.
 
-**Soluzione:** ✅ Aggiornato `package.json` per utilizzare Node.js 22.x
+**Soluzione:** ✅ Aggiornato `package.json` per utilizzare Node.js 20.x (più stabile con i builder Vercel)
 
 ```json
 {
   "engines": {
-    "node": "22.x"
+    "node": "20.x"
   }
 }
 ```
+
+> **Nota:** Node 20.x è preferibile a 22.x su Vercel perché alcuni builder ufficiali (`@vercel/node@2.x`) non supportano ancora Node 22 in modo stabile. Node 20.x risolve anche i warning EBADENGINE di pacchetti come `react-router@7.8.1`.
 
 ### 2. Configurazione Variabili d'Ambiente Supabase
 
@@ -38,10 +40,27 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
 ## 📋 Checklist per il Deploy
 
+### Preparazione Pre-Deploy
+
+**Pulizia Dependencies (Raccomandato):**
+
+Prima del deploy, pulisci i lockfile per evitare conflitti:
+
+```bash
+# Rimuovi vecchi lockfile e node_modules
+rm -rf node_modules package-lock.json pnpm-lock.yaml
+
+# Reinstalla con npm
+npm install
+
+# OPPURE se usi pnpm
+pnpm install
+```
+
 ### Configurazione Vercel
 
 1. **Impostazioni Progetto:**
-   - [ ] Node.js Version: `22.x`
+   - [ ] Node.js Version: `20.x`
    - [ ] Build Command: `npm run build`
    - [ ] Output Directory: `dist`
    - [ ] Install Command: `npm install`
