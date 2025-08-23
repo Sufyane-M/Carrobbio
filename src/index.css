@@ -1,0 +1,325 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom CSS Variables for Italian Restaurant Theme */
+:root {
+  /* Typography */
+  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  line-height: 1.6;
+  font-weight: 400;
+  
+  /* Performance optimizations */
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  /* Custom properties for animations */
+  --scroll-progress: 0;
+  --animation-speed: 0.3s;
+  --ease-out-cubic: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Base layer improvements */
+@layer base {
+  /* Enhanced typography */
+  .font-display {
+    font-family: 'Playfair Display', serif;
+    font-feature-settings: 'liga', 'kern';
+  }
+  
+  .font-heading {
+    font-family: 'Montserrat', sans-serif;
+    font-feature-settings: 'liga', 'kern';
+  }
+  
+  .font-body {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-feature-settings: 'liga', 'kern';
+  }
+  
+  .font-accent {
+    font-family: 'Dancing Script', cursive;
+  }
+  
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Enhanced focus states for accessibility */
+  *:focus-visible {
+    outline: 2px solid theme('colors.primary.500');
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+  }
+  
+  /* Selection colors */
+  ::selection {
+    background-color: theme('colors.primary.200');
+    color: theme('colors.primary.800');
+  }
+  
+  /* Enhanced image loading */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: theme('colors.neutral.100');
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: theme('colors.primary.400');
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: theme('colors.primary.500');
+  }
+}
+
+/* Component layer for reusable patterns */
+@layer components {
+  /* Enhanced button hover effects */
+  .btn-hover-lift {
+    @apply transition-all duration-300 ease-out transform hover:scale-105 hover:shadow-lg;
+  }
+  
+  .btn-hover-glow {
+    @apply transition-all duration-300 ease-out hover:shadow-glow;
+  }
+  
+  /* Card hover effects */
+  .card-hover {
+    @apply transition-all duration-500 ease-out transform hover:shadow-strong hover:-translate-y-2;
+  }
+  
+  .card-hover-subtle {
+    @apply transition-all duration-300 ease-out hover:shadow-medium hover:-translate-y-1;
+  }
+  
+  /* Text gradient effects */
+  .text-gradient-primary {
+    @apply bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent;
+  }
+  
+  .text-gradient-accent {
+    @apply bg-gradient-to-r from-accent-500 to-accent-700 bg-clip-text text-transparent;
+  }
+  
+  /* Loading states */
+  .loading-shimmer {
+    @apply animate-pulse bg-gradient-to-r from-neutral-200 via-neutral-100 to-neutral-200 bg-size-200 animate-shimmer;
+  }
+  
+  /* Interactive states */
+  .interactive-element {
+    @apply transition-all duration-200 ease-out;
+  }
+  
+  .interactive-element:hover {
+    @apply transform scale-105;
+  }
+  
+  .interactive-element:active {
+    @apply transform scale-95;
+  }
+  
+  /* Focus improvements */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-white;
+  }
+  
+  /* Glass morphism effect */
+  .glass-morphism {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
+  }
+  
+  /* Text truncation utilities */
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* Utility layer for one-off styles */
+@layer utilities {
+  /* Animation delays */
+  .animate-delay-100 {
+    animation-delay: 0.1s;
+  }
+  
+  .animate-delay-200 {
+    animation-delay: 0.2s;
+  }
+  
+  .animate-delay-300 {
+    animation-delay: 0.3s;
+  }
+  
+  .animate-delay-500 {
+    animation-delay: 0.5s;
+  }
+  
+  /* Background utilities */
+  .bg-size-200 {
+    background-size: 200% 200%;
+  }
+  
+  /* Perspective for 3D effects */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  
+  /* Custom transforms */
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+  
+  /* Smooth transitions */
+  .transition-smooth {
+    transition: all var(--animation-speed) var(--ease-out-cubic);
+  }
+  
+  /* Text shadows for better readability */
+  .text-shadow {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+  
+  .text-shadow-lg {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Backdrop filters */
+  .backdrop-blur-xs {
+    backdrop-filter: blur(2px);
+  }
+}
+
+/* Custom animations */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes bounceGentle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes pulseSoft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Intersection Observer animations */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease-out;
+}
+
+.animate-on-scroll.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Print styles */
+@media print {
+  * {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .animate-fade-in-up,
+  .animate-fade-in,
+  .animate-slide-in-left,
+  .animate-slide-in-right,
+  .animate-bounce-gentle,
+  .animate-pulse-soft {
+    animation: none !important;
+  }
+}
