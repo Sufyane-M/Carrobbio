@@ -7,12 +7,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import dotenv from 'dotenv';
-import { fileURLToPath } from 'url';
-import authRoutes from './routes/auth';
-
-// for esm mode
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import authRoutes from './routes/auth.js';
 
 // load env
 dotenv.config();

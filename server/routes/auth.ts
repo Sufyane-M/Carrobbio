@@ -1,5 +1,5 @@
 import express from 'express';
-import * as authController from '../controllers/authController';
+import * as authController from '../controllers/authController.js';
 import { 
   authenticateToken, 
   requireRole, 
@@ -7,12 +7,12 @@ import {
   validateInput, 
   securityHeaders,
   logSensitiveOperation 
-} from '../middleware/auth';
+} from '../middleware/auth.js';
 import { 
   rateLimiter, 
   loginRateLimiter, 
   passwordResetRateLimiter 
-} from '../middleware/rateLimiter';
+} from '../middleware/rateLimiter.js';
 import { z } from 'zod';
 
 /**

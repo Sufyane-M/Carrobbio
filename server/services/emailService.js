@@ -3,55 +3,48 @@
  * Gestisce l'invio delle email per reset password e notifiche di sicurezza
  */
 import nodemailer from 'nodemailer';
-import { supabase } from '../lib/supabase.js';
-
 // Configurazione email
 const EMAIL_CONFIG = {
-  host: process.env.SMTP_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.SMTP_PORT || '587'),
-  secure: process.env.SMTP_SECURE === 'true', // true per 465, false per altri
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS
-  }
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: parseInt(process.env.SMTP_PORT || '587'),
+    secure: process.env.SMTP_SECURE === 'true', // true per 465, false per altri
+    auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
+    }
 };
-
 const FROM_EMAIL = process.env.FROM_EMAIL || 'noreply@carrobbio.com';
 const FROM_NAME = process.env.FROM_NAME || 'Ristorante Carrobbio';
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
-
 // Crea il transporter per nodemailer
-let transporter: nodemailer.Transporter | null = null;
-
+let transporter = null;
 /**
  * Inizializza il transporter email
  */
-const initializeTransporter = (): nodemailer.Transporter => {
-  if (!transporter) {
-    if (!EMAIL_CONFIG.auth.user || !EMAIL_CONFIG.auth.pass) {
-      console.warn('Configurazione email mancante. Le email non verranno inviate.');
-      // Restituisce un transporter mock per sviluppo
-      return {
-        sendMail: async (mailOptions: any) => {
-          console.log('📧 EMAIL MOCK - Invio simulato:');
-          console.log('To:', mailOptions.to);
-          console.log('Subject:', mailOptions.subject);
-          console.log('Content:', mailOptions.text || mailOptions.html);
-          return { messageId: 'mock-message-id' };
+const initializeTransporter = () => {
+    if (!transporter) {
+        if (!EMAIL_CONFIG.auth.user || !EMAIL_CONFIG.auth.pass) {
+            console.warn('Configurazione email mancante. Le email non verranno inviate.');
+            // Restituisce un transporter mock per sviluppo
+            return {
+                sendMail: async (mailOptions) => {
+                    console.log('📧 EMAIL MOCK - Invio simulato:');
+                    console.log('To:', mailOptions.to);
+                    console.log('Subject:', mailOptions.subject);
+                    console.log('Content:', mailOptions.text || mailOptions.html);
+                    return { messageId: 'mock-message-id' };
+                }
+            };
         }
-      } as any;
+        transporter = nodemailer.createTransport(EMAIL_CONFIG);
     }
-
-    transporter = nodemailer.createTransport(EMAIL_CONFIG);
-  }
-  return transporter;
+    return transporter;
 };
-
 /**
  * Template HTML per email di reset password
  */
-const getPasswordResetTemplate = (resetUrl: string, userEmail: string): string => {
-  return `
+const getPasswordResetTemplate = (resetUrl, userEmail) => {
+    return `
     <!DOCTYPE html>
     <html lang="it">
     <head>
@@ -157,17 +150,11 @@ const getPasswordResetTemplate = (resetUrl: string, userEmail: string): string =
     </html>
   `;
 };
-
 /**
  * Template HTML per notifica di login sospetto
  */
-const getSuspiciousLoginTemplate = (
-  userEmail: string, 
-  ipAddress: string, 
-  userAgent: string, 
-  timestamp: string
-): string => {
-  return `
+const getSuspiciousLoginTemplate = (userEmail, ipAddress, userAgent, timestamp) => {
+    return `
     <!DOCTYPE html>
     <html lang="it">
     <head>
@@ -262,26 +249,19 @@ const getSuspiciousLoginTemplate = (
     </html>
   `;
 };
-
 /**
  * Invia email di reset password
  */
-export const sendPasswordResetEmail = async (
-  email: string,
-  resetToken: string,
-  userAgent?: string,
-  ipAddress?: string
-): Promise<{ success: boolean; error?: string }> => {
-  try {
-    const transporter = initializeTransporter();
-    const resetUrl = `${FRONTEND_URL}/admin/reset-password?token=${resetToken}`;
-    
-    const mailOptions = {
-      from: `"${FROM_NAME}" <${FROM_EMAIL}>`,
-      to: email,
-      subject: '🔐 Reset Password - Ristorante Carrobbio',
-      html: getPasswordResetTemplate(resetUrl, email),
-      text: `
+export const sendPasswordResetEmail = async (email, resetToken, userAgent, ipAddress) => {
+    try {
+        const transporter = initializeTransporter();
+        const resetUrl = `${FRONTEND_URL}/admin/reset-password?token=${resetToken}`;
+        const mailOptions = {
+            from: `"${FROM_NAME}" <${FROM_EMAIL}>`,
+            to: email,
+            subject: '🔐 Reset Password - Ristorante Carrobbio',
+            html: getPasswordResetTemplate(resetUrl, email),
+            text: `
         Reset della Password - Ristorante Carrobbio
         
         Hai richiesto il reset della password per il tuo account amministratore (${email}).
@@ -293,44 +273,33 @@ export const sendPasswordResetEmail = async (
         
         Se non hai richiesto questo reset, ignora questa email.
       `
-    };
-
-    const result = await transporter.sendMail(mailOptions);
-    
-    // Log dell'evento rimosso - gestito dal securityService
-
-    console.log('Email di reset password inviata:', result.messageId);
-    return { success: true };
-  } catch (error) {
-    console.error('Errore nell\'invio dell\'email di reset password:', error);
-    
-    // Log dell'errore rimosso - gestito dal securityService
-
-    return { 
-      success: false, 
-      error: error.message || 'Errore nell\'invio dell\'email' 
-    };
-  }
+        };
+        const result = await transporter.sendMail(mailOptions);
+        // Log dell'evento rimosso - gestito dal securityService
+        console.log('Email di reset password inviata:', result.messageId);
+        return { success: true };
+    }
+    catch (error) {
+        console.error('Errore nell\'invio dell\'email di reset password:', error);
+        // Log dell'errore rimosso - gestito dal securityService
+        return {
+            success: false,
+            error: error.message || 'Errore nell\'invio dell\'email'
+        };
+    }
 };
-
 /**
  * Invia notifica di login sospetto
  */
-export const sendSuspiciousLoginNotification = async (
-  email: string,
-  ipAddress: string,
-  userAgent: string,
-  timestamp: string
-): Promise<{ success: boolean; error?: string }> => {
-  try {
-    const transporter = initializeTransporter();
-    
-    const mailOptions = {
-      from: `"${FROM_NAME} Security" <${FROM_EMAIL}>`,
-      to: email,
-      subject: '🚨 Attività Sospetta Rilevata - Ristorante Carrobbio',
-      html: getSuspiciousLoginTemplate(email, ipAddress, userAgent, timestamp),
-      text: `
+export const sendSuspiciousLoginNotification = async (email, ipAddress, userAgent, timestamp) => {
+    try {
+        const transporter = initializeTransporter();
+        const mailOptions = {
+            from: `"${FROM_NAME} Security" <${FROM_EMAIL}>`,
+            to: email,
+            subject: '🚨 Attività Sospetta Rilevata - Ristorante Carrobbio',
+            html: getSuspiciousLoginTemplate(email, ipAddress, userAgent, timestamp),
+            text: `
         Attività Sospetta Rilevata - Ristorante Carrobbio
         
         È stata rilevata un'attività sospetta sul tuo account amministratore.
@@ -343,38 +312,31 @@ export const sendSuspiciousLoginNotification = async (
         
         Se non sei stato tu, cambia immediatamente la password.
       `
-    };
-
-    const result = await transporter.sendMail(mailOptions);
-    
-    console.log('Notifica di login sospetto inviata:', result.messageId);
-    return { success: true };
-  } catch (error) {
-    console.error('Errore nell\'invio della notifica di login sospetto:', error);
-    return { 
-      success: false, 
-      error: error.message || 'Errore nell\'invio della notifica' 
-    };
-  }
+        };
+        const result = await transporter.sendMail(mailOptions);
+        console.log('Notifica di login sospetto inviata:', result.messageId);
+        return { success: true };
+    }
+    catch (error) {
+        console.error('Errore nell\'invio della notifica di login sospetto:', error);
+        return {
+            success: false,
+            error: error.message || 'Errore nell\'invio della notifica'
+        };
+    }
 };
-
 /**
  * Invia notifica di cambio password
  */
-export const sendPasswordChangeNotification = async (
-  email: string,
-  ipAddress: string,
-  userAgent: string
-): Promise<{ success: boolean; error?: string }> => {
-  try {
-    const transporter = initializeTransporter();
-    const timestamp = new Date().toLocaleString('it-IT');
-    
-    const mailOptions = {
-      from: `"${FROM_NAME}" <${FROM_EMAIL}>`,
-      to: email,
-      subject: '✅ Password Cambiata - Ristorante Carrobbio',
-      html: `
+export const sendPasswordChangeNotification = async (email, ipAddress, userAgent) => {
+    try {
+        const transporter = initializeTransporter();
+        const timestamp = new Date().toLocaleString('it-IT');
+        const mailOptions = {
+            from: `"${FROM_NAME}" <${FROM_EMAIL}>`,
+            to: email,
+            subject: '✅ Password Cambiata - Ristorante Carrobbio',
+            html: `
         <!DOCTYPE html>
         <html lang="it">
         <head>
@@ -412,7 +374,7 @@ export const sendPasswordChangeNotification = async (
         </body>
         </html>
       `,
-      text: `
+            text: `
         Password Cambiata - Ristorante Carrobbio
         
         La password del tuo account è stata cambiata con successo.
@@ -425,40 +387,37 @@ export const sendPasswordChangeNotification = async (
         
         Se non hai effettuato tu questo cambio, contatta l'amministratore.
       `
-    };
-
-    const result = await transporter.sendMail(mailOptions);
-    
-    console.log('Notifica di cambio password inviata:', result.messageId);
-    return { success: true };
-  } catch (error) {
-    console.error('Errore nell\'invio della notifica di cambio password:', error);
-    return { 
-      success: false, 
-      error: error.message || 'Errore nell\'invio della notifica' 
-    };
-  }
+        };
+        const result = await transporter.sendMail(mailOptions);
+        console.log('Notifica di cambio password inviata:', result.messageId);
+        return { success: true };
+    }
+    catch (error) {
+        console.error('Errore nell\'invio della notifica di cambio password:', error);
+        return {
+            success: false,
+            error: error.message || 'Errore nell\'invio della notifica'
+        };
+    }
 };
-
 /**
  * Testa la configurazione email
  */
-export const testEmailConfiguration = async (): Promise<{ success: boolean; error?: string }> => {
-  try {
-    const transporter = initializeTransporter();
-    
-    // Verifica la connessione SMTP
-    if (typeof transporter.verify === 'function') {
-      await transporter.verify();
+export const testEmailConfiguration = async () => {
+    try {
+        const transporter = initializeTransporter();
+        // Verifica la connessione SMTP
+        if (typeof transporter.verify === 'function') {
+            await transporter.verify();
+        }
+        console.log('Configurazione email verificata con successo');
+        return { success: true };
     }
-    
-    console.log('Configurazione email verificata con successo');
-    return { success: true };
-  } catch (error) {
-    console.error('Errore nella configurazione email:', error);
-    return { 
-      success: false, 
-      error: error.message || 'Errore nella configurazione email' 
-    };
-  }
+    catch (error) {
+        console.error('Errore nella configurazione email:', error);
+        return {
+            success: false,
+            error: error.message || 'Errore nella configurazione email'
+        };
+    }
 };

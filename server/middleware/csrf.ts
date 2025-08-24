@@ -3,7 +3,7 @@
  * Protegge da attacchi Cross-Site Request Forgery
  */
 import { Request, Response, NextFunction } from 'express';
-import { supabase } from '../lib/supabase';
+import { supabase } from '../lib/supabase.js';
 import crypto from 'crypto';
 
 

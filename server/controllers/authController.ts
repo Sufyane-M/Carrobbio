@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { supabase } from '../lib/supabase';
+import { supabase } from '../lib/supabase.js';
 import { z } from 'zod';
 import crypto from 'crypto';
 

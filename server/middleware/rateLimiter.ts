@@ -3,7 +3,7 @@
  * Protegge dalle richieste eccessive e attacchi brute force
  */
 import { Request, Response, NextFunction } from 'express';
-import { supabase } from '../lib/supabase';
+import { supabase } from '../lib/supabase.js';
 
 interface RateLimitConfig {
   windowMs: number; // Finestra temporale in millisecondi
