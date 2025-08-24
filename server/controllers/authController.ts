@@ -14,7 +14,19 @@ import crypto from 'crypto';
 // JWT Secret validation
 const JWT_SECRET: string = process.env.JWT_SECRET || '';
 if (!JWT_SECRET) {
+  console.error('JWT_SECRET environment variable is required');
   throw new Error('JWT_SECRET environment variable is required');
+}
+
+// Validate other required environment variables
+if (!process.env.SUPABASE_URL) {
+  console.error('SUPABASE_URL environment variable is required');
+  throw new Error('SUPABASE_URL environment variable is required');
+}
+
+if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  console.error('SUPABASE_SERVICE_ROLE_KEY environment variable is required');
+  throw new Error('SUPABASE_SERVICE_ROLE_KEY environment variable is required');
 }
 
 // Schema di validazione per il login (rilassato per compatibilità con utenti seed)
@@ -309,7 +321,18 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     });
     
   } catch (error) {
-    console.error('Errore nel login:', error);
+    console.error('Errore nel login:', {
+      error: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      timestamp: new Date().toISOString(),
+      ipAddress,
+      userAgent
+    });
+    
+    // Ensure response hasn't been sent already
+    if (res.headersSent) {
+      return;
+    }
     
     if (error instanceof z.ZodError) {
       res.status(400).json({
@@ -321,12 +344,20 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
     
-    await logSecurityEvent(null, 'LOGIN_ERROR', ipAddress, userAgent, false, error instanceof Error ? error.message : 'Unknown error');
+    // Try to log security event, but don't let it fail the response
+    try {
+      await logSecurityEvent(null, 'LOGIN_ERROR', ipAddress, userAgent, false, error instanceof Error ? error.message : 'Unknown error');
+    } catch (logError) {
+      console.error('Failed to log security event:', logError);
+    }
     
     res.status(500).json({
       success: false,
       error: 'Errore interno del server',
-      code: 'INTERNAL_ERROR'
+      code: 'INTERNAL_ERROR',
+      ...(process.env.NODE_ENV !== 'production' && { 
+        details: error instanceof Error ? error.message : 'Unknown error' 
+      })
     });
   }
 };
