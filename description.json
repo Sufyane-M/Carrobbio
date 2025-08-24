@@ -1,0 +1,77 @@
+import json
+
+# Build extracted data for pizzeriacarrobbio.com based on the visible page content
+data = {
+    "site": {
+        "url": "https://www.pizzeriacarrobbio.com/",
+        "platform": "Wix (static.wixstatic.com assets)",
+        "title": "Ristorante di pesce, pizzeria, il carrobbio | ristorante | Santuario della Beata Vergine del Carrobbio, Casina, Province of Reggio Emilia, Italy"
+    },
+    "meta": {
+        "description": None,
+        "open_graph": None
+    },
+    "structure": [
+        {"anchor": "hero", "heading": "Mangia. Bevi. Rilassati.", "subheading": "Concediti un piacere"},
+        {"anchor": "chi-siamo", "heading": "Chi siamo", "summary": "Storia del progetto e del recupero dei luoghi; apertura il 1° luglio 2023; staff citato."},
+        {"anchor": "i-nostri-cibi", "heading": "I nostri cibi", "summary": "Sezione con immagini di pizza e piatti di pesce, claim 'Assapora il sapore'."},
+        {"anchor": "contatti", "heading": "Contatti", "summary": "Indirizzo, email e form di contatto con campi standard."},
+        {"anchor": "orari", "heading": "Orari di apertura", "summary": "Fascia oraria serale 19:00–23:00; giovedì chiuso (come indicato nella pagina)."},
+        {"anchor": "footer", "heading": "Footer", "summary": "Copyright ©2023; dicitura 'Creato con Wix.com'."}
+    ],
+    "texts_factual": {
+        "address": "Santuario della Beata Vergine del Carrobbio, Casina (RE), Italy",
+        "email": ["pizzeriacarrobbio@gmail.com"],
+        "phones": ["+39 335 6656335", "0522 206510"],
+        "hours": {
+            "note": "Per cenare e da asporto",
+            "opening": [
+                {"days": "Lun - Dom", "hours": "19:00 - 23:00"},
+                {"days": "Giovedì", "hours": "Chiuso"}
+            ]
+        }
+    },
+    "assets": {
+        "images": [
+            "https://static.wixstatic.com/media/db484f_7bf8ef99b2e94012b0bfb871fe7d5859~mv2.jpg/v1/fill/w_980,h_444,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/db484f_7bf8ef99b2e94012b0bfb871fe7d5859~mv2.jpg",
+            "https://static.wixstatic.com/media/11062b_36f1443c86854c3687026bace2d9956f~mv2.jpg/v1/fill/w_326,h_217,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/11062b_36f1443c86854c3687026bace2d9956f~mv2.jpg",
+            "https://static.wixstatic.com/media/11062b_674af5cd927d457eab28d48bd4051d64~mv2.jpg/v1/fill/w_327,h_218,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/11062b_674af5cd927d457eab28d48bd4051d64~mv2.jpg",
+            "https://static.wixstatic.com/media/ab07d422f6304f0fa334ff5a72bd7b65.jpg/v1/fill/w_327,h_218,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/ab07d422f6304f0fa334ff5a72bd7b65.jpg"
+        ],
+        "logo": None,
+        "favicon": None,
+        "downloads": []
+    },
+    "styleguide": {
+        "palette": {
+            "note": "Background appears white; text dark. Exact HEX not accessible without CSS inspection.",
+            "primary": None,
+            "secondary": None,
+            "accent": None,
+            "neutral": ["#FFFFFF", "#111111"]
+        },
+        "typography": {
+            "note": "Wix-hosted fonts; visually a modern sans-serif. Verify exact family via devtools.",
+            "headings": None,
+            "body": None
+        },
+        "components": [
+            "Navbar (hamburger 'More' on mobile)",
+            "Hero with background image and large H1",
+            "Cards/Images grid (3 columns at desktop)",
+            "Contact form: Nome, Indirizzo, Email, Telefono, Oggetto, Messaggio",
+            "Footer with contacts and credits"
+        ]
+    },
+    "legal": {
+        "copyright_notice": "©2023 by IL CARROBBIO pizzeria. Creato con Wix.com",
+        "content_copying": "Testi e immagini potrebbero essere protetti da copyright. Usare solo con permesso."
+    }
+}
+
+# Save JSON
+json_path = "/mnt/data/pizzeriacarrobbio_design_audit.json"
+with open(json_path, "w", encoding="utf-8") as f:
+    json.dump(data, f, ensure_ascii=False, indent=2)
+
+json_path
