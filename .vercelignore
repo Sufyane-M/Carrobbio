@@ -4,3 +4,9 @@ dist
 .git
 .trae
 .log
+
+# Ignore compiled JavaScript files to prevent conflicts
+server/**/*.js
+api/**/*.js
+shared/**/*.js
+*.js.map
